@@ -1,85 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <title>Чат | Dating App</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat - Dating App</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <!-- Подключаем новый стиль Telegram -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_telegram.css') }}">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-container">
-            <h1>Dating App - Chat</h1>
-            <div class="nav-links">
-                <a href="{{ url_for('index') }}">Home</a>
-                <a href="{{ url_for('chat') }}">Chat</a>
-                <a href="{{ url_for('announcements') }}">Announcements</a>
-                <a href="{{ url_for('stories') }}">Stories</a>
-                {% if user.is_admin %}
-                    <a href="{{ url_for('admin') }}">Admin</a>
+    <!-- Сторис -->
+    <div class="stories-bar">
+        {% for story in stories %}
+        <div class="story-preview" onclick="openStory('{{ story.id }}')">
+            <img src="{{ story.preview_url }}" alt="Story" />
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Чат -->
+    <div class="chat-container">
+        {% for message in messages %}
+        <div class="message-row {% if message.is_own %}own{% endif %}">
+            <img class="avatar" src="{{ message.avatar_url }}" alt="avatar">
+            <div class="message-bubble">
+                <a class="username" href="https://t.me/{{ message.username }}" target="_blank">
+                    {{ message.username }}
+                </a>
+                <span class="message-text">{{ message.text }}</span>
+                <span class="message-time">{{ message.time }}</span>
+                {% if is_admin %}
+                <button class="delete-btn" onclick="deleteMessage('{{ message.id }}')">Удалить</button>
                 {% endif %}
-                <a href="{{ url_for('logout') }}">Logout</a>
             </div>
         </div>
-    </nav>
+        {% endfor %}
+    </div>
 
-    <div class="chat-container">
-        <div class="chat-messages" id="messages">
-            {% for message in messages %}
-                <div class="message">
-                    <span class="username">{{ message.sender.first_name }}:</span>
-                    <span class="content">{{ message.content }}</span>
-                    <span class="timestamp">{{ message.timestamp.strftime('%H:%M') }}</span>
-                </div>
-            {% endfor %}
-        </div>
+    <!-- Меню снизу -->
+    <div class="bottom-menu">
+        <a href="{{ url_for('chat') }}" class="menu-btn active">Чат</a>
+        <a href="{{ url_for('announcements') }}" class="menu-btn">Объявления</a>
+    </div>
 
-        <div class="chat-input">
-            <input type="text" id="messageInput" placeholder="Type your message..." maxlength="500">
-            <button onclick="sendMessage()">Send</button>
-        </div>
+    <!-- Модальное окно сторис (скелет) -->
+    <div id="story-modal" class="story-modal" style="display:none;">
+        <span class="close" onclick="closeStory()">&times;</span>
+        <img id="story-img" src="" alt="Story" />
     </div>
 
     <script>
-        const socket = io();
-        const messagesDiv = document.getElementById('messages');
-        const messageInput = document.getElementById('messageInput');
-
-        // Join the general room
-        socket.emit('join', {room: 'general'});
-
-        // Listen for messages
-        socket.on('message', function(data) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = 'message';
-            messageDiv.innerHTML = `
-                <span class="username">${data.username}:</span>
-                <span class="content">${data.message}</span>
-                <span class="timestamp">${data.timestamp}</span>
-            `;
-            messagesDiv.appendChild(messageDiv);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-        });
-
-        // Send message function
-        function sendMessage() {
-            const message = messageInput.value.trim();
-            if (message) {
-                socket.emit('message', {
-                    message: message,
-                    room: 'general'
-                });
-                messageInput.value = '';
-            }
+        function openStory(id) {
+            // Здесь логика подгрузки сторис по id
+            // Пример:
+            document.getElementById('story-modal').style.display = 'flex';
+            document.getElementById('story-img').src = '/story/' + id;
         }
-
-        // Send message on Enter key
-        messageInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                sendMessage();
-            }
-        });
+        function closeStory() {
+            document.getElementById('story-modal').style.display = 'none';
+        }
+        function deleteMessage(id) {
+            // AJAX-запрос на удаление сообщения
+        }
     </script>
 </body>
 </html>
