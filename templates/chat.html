@@ -4,63 +4,51 @@
     <meta charset="UTF-8">
     <title>Чат | Dating App</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Подключаем новый стиль Telegram -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style_telegram.css') }}">
 </head>
 <body>
-    <!-- Сторис -->
+    <!-- Сторис (кругляши сверху) -->
     <div class="stories-bar">
-        {% for story in stories %}
-        <div class="story-preview" onclick="openStory('{{ story.id }}')">
-            <img src="{{ story.preview_url }}" alt="Story" />
-        </div>
-        {% endfor %}
+        <div class="story-preview"><img src="https://randomuser.me/api/portraits/men/1.jpg" alt="Story"></div>
+        <div class="story-preview"><img src="https://randomuser.me/api/portraits/women/2.jpg" alt="Story"></div>
+        <div class="story-preview"><img src="https://randomuser.me/api/portraits/men/3.jpg" alt="Story"></div>
+        <div class="story-preview"><img src="https://randomuser.me/api/portraits/women/4.jpg" alt="Story"></div>
+        <div class="story-preview"><img src="https://randomuser.me/api/portraits/men/5.jpg" alt="Story"></div>
     </div>
 
-    <!-- Чат -->
+    <!-- Основная часть чата -->
     <div class="chat-container">
-        {% for message in messages %}
-        <div class="message-row {% if message.is_own %}own{% endif %}">
-            <img class="avatar" src="{{ message.avatar_url }}" alt="avatar">
+        <div class="message-row">
+            <img class="avatar" src="https://randomuser.me/api/portraits/men/1.jpg" alt="avatar">
             <div class="message-bubble">
-                <a class="username" href="https://t.me/{{ message.username }}" target="_blank">
-                    {{ message.username }}
-                </a>
-                <span class="message-text">{{ message.text }}</span>
-                <span class="message-time">{{ message.time }}</span>
-                {% if is_admin %}
-                <button class="delete-btn" onclick="deleteMessage('{{ message.id }}')">Удалить</button>
-                {% endif %}
+                <a class="username" href="https://t.me/username1" target="_blank">username1</a>
+                <span class="message-text">Привет! Это тестовое сообщение от первого пользователя.</span>
+                <span class="message-time">12:01</span>
+                <button class="delete-btn">Удалить</button>
             </div>
         </div>
-        {% endfor %}
+        <div class="message-row own">
+            <img class="avatar" src="https://randomuser.me/api/portraits/women/2.jpg" alt="avatar">
+            <div class="message-bubble">
+                <a class="username" href="https://t.me/username2" target="_blank">username2</a>
+                <span class="message-text">Привет! Как дела? Это моё тестовое сообщение.</span>
+                <span class="message-time">12:02</span>
+            </div>
+        </div>
+        <div class="message-row">
+            <img class="avatar" src="https://randomuser.me/api/portraits/men/3.jpg" alt="avatar">
+            <div class="message-bubble">
+                <a class="username" href="https://t.me/username3" target="_blank">username3</a>
+                <span class="message-text">Отлично, спасибо! А у тебя?</span>
+                <span class="message-time">12:05</span>
+            </div>
+        </div>
     </div>
 
-    <!-- Меню снизу -->
+    <!-- Меню снизу (кнопки "Чат" и "Объявления") -->
     <div class="bottom-menu">
-        <a href="{{ url_for('chat') }}" class="menu-btn active">Чат</a>
-        <a href="{{ url_for('announcements') }}" class="menu-btn">Объявления</a>
+        <a href="#" class="menu-btn active">Чат</a>
+        <a href="#" class="menu-btn">Объявления</a>
     </div>
-
-    <!-- Модальное окно сторис (скелет) -->
-    <div id="story-modal" class="story-modal" style="display:none;">
-        <span class="close" onclick="closeStory()">&times;</span>
-        <img id="story-img" src="" alt="Story" />
-    </div>
-
-    <script>
-        function openStory(id) {
-            // Здесь логика подгрузки сторис по id
-            // Пример:
-            document.getElementById('story-modal').style.display = 'flex';
-            document.getElementById('story-img').src = '/story/' + id;
-        }
-        function closeStory() {
-            document.getElementById('story-modal').style.display = 'none';
-        }
-        function deleteMessage(id) {
-            // AJAX-запрос на удаление сообщения
-        }
-    </script>
 </body>
 </html>
