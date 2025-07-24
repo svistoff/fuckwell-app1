@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stories - Dating App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1>Dating App - Stories</h1>
+            <div class="nav-links">
+                <a href="{{ url_for('index') }}">Home</a>
+                <a href="{{ url_for('chat') }}">Chat</a>
+                <a href="{{ url_for('announcements') }}">Announcements</a>
+                <a href="{{ url_for('stories') }}">Stories</a>
+                {% if user.is_admin %}
+                    <a href="{{ url_for('admin') }}">Admin</a>
+                {% endif %}
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2>📖 Stories</h2>
+
+        <div class="stories-grid">
+            {% for story in stories %}
+                <div class="story-card">
+                    {% if story.image_url %}
+                        <img src="{{ story.image_url }}" alt="{{ story.title }}" class="story-image">
+                    {% endif %}
+                    <div class="story-content">
+                        <h3>{{ story.title }}</h3>
+                        <p>{{ story.content }}</p>
+                        <div class="story-meta">
+                            <span>Posted: {{ story.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
+                            <span>Expires: {{ story.expires_at.strftime('%Y-%m-%d %H:%M') }}</span>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="no-content">
+                    <p>No active stories at the moment.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

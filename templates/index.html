@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dating App - Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1>Dating App</h1>
+            <div class="nav-links">
+                <a href="{{ url_for('index') }}">Home</a>
+                <a href="{{ url_for('chat') }}">Chat</a>
+                <a href="{{ url_for('announcements') }}">Announcements</a>
+                <a href="{{ url_for('stories') }}">Stories</a>
+                {% if user.is_admin %}
+                    <a href="{{ url_for('admin') }}">Admin</a>
+                {% endif %}
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="welcome-section">
+            <h2>Welcome, {{ user.first_name }}!</h2>
+            <p>You're logged in successfully. Explore the app using the navigation above.</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <h3>💬 Chat</h3>
+                <p>Connect with other users in real-time chat</p>
+                <a href="{{ url_for('chat') }}" class="btn">Go to Chat</a>
+            </div>
+
+            <div class="feature-card">
+                <h3>📢 Announcements</h3>
+                <p>Stay updated with the latest announcements</p>
+                <a href="{{ url_for('announcements') }}" class="btn">View Announcements</a>
+            </div>
+
+            <div class="feature-card">
+                <h3>📖 Stories</h3>
+                <p>Share and view stories from the community</p>
+                <a href="{{ url_for('stories') }}" class="btn">View Stories</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Announcements - Dating App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1>Dating App - Announcements</h1>
+            <div class="nav-links">
+                <a href="{{ url_for('index') }}">Home</a>
+                <a href="{{ url_for('chat') }}">Chat</a>
+                <a href="{{ url_for('announcements') }}">Announcements</a>
+                <a href="{{ url_for('stories') }}">Stories</a>
+                {% if user.is_admin %}
+                    <a href="{{ url_for('admin') }}">Admin</a>
+                {% endif %}
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2>📢 Announcements</h2>
+
+        <div class="announcements-list">
+            {% for announcement in announcements %}
+                <div class="announcement-card">
+                    <h3>{{ announcement.title }}</h3>
+                    <p>{{ announcement.content }}</p>
+                    <div class="announcement-meta">
+                        <span>Posted: {{ announcement.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
+                    </div>
+                </div>
+            {% else %}
+                <div class="no-content">
+                    <p>No announcements available at the moment.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
